@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    container_name: task_manager_app
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    volumes:
+      - .:/app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/task_manager_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+    command: ["./mvnw", "spring-boot:run"]
+
+  mysql:
+    image: mysql:8.0
+    container_name: task_manager_msql
+    restart: always
+    environment:
+      MYSQL_DATABASE: task_manager_db
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+    volumes:
+       - dbdata:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: task_manager_phpmyadmin
+    ports:
+      - "8085:80"
+    environment:
+      PMA_HOST: task_manager_msql
+      PMA_PORT: '3306'
+      PMA_USER: root
+      PMA_PASSWORD: rootpass
+    depends_on:
+      - mysql
+volumes:
+  dbdata:
