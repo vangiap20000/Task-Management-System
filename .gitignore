@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Other ###
+.ipynb_checkpoints/
+Untitled.ipynb
