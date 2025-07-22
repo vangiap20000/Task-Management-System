@@ -1,0 +1,60 @@
+<th:block>
+
+  <!-- Input -->
+  <th:block th:fragment="inputText(fieldName, labelText)">
+    <div class="form-group">
+      <label th:for="${fieldName}" th:text="${labelText}"></label>
+      <input type="text" th:id="${fieldName}" th:name="${fieldName}" class="form-control" />
+    </div>
+  </th:block>
+
+  <!-- Textarea -->
+  <th:block th:fragment="textarea(fieldName, labelText)">
+    <div class="form-group">
+      <label th:for="${fieldName}" th:text="${labelText}">Label</label>
+      <textarea th:id="${fieldName}" th:name="${fieldName}" class="form-control"></textarea>
+    </div>
+  </th:block>
+
+  <!-- File -->
+  <th:block th:fragment="file(fieldName, labelText)">
+    <div class="form-group">
+      <label th:for="${fieldName}" th:text="${labelText}">Label</label>
+      <input type="file" th:id="${fieldName}" th:name="${fieldName}" class="form-control" />
+    </div>
+  </th:block>
+
+  <!-- Checkbox -->
+  <th:block th:fragment="checkbox(fieldName, labelText, checked)">
+    <div class="form-group checkbox-label">
+      <input type="checkbox" th:id="${fieldName}" th:name="${fieldName}" th:checked="${checked}" />
+      <label th:for="${fieldName}" th:text="${labelText}">Label</label>
+    </div>
+  </th:block>
+
+  <!-- Radio -->
+  <th:block th:fragment="radio(fieldName, labelText, value, checkedValue)">
+    <div class="form-group radio-label">
+      <input type="radio"
+            th:id="${fieldName} + '_' + ${value}"
+            th:name="${fieldName}"
+            th:value="${value}"
+            th:checked="${value == checkedValue}" />
+      <label th:for="${fieldName} + '_' + ${value}" th:text="${labelText}">Option</label>
+    </div>
+  </th:block>
+
+  <!-- Select -->
+  <th:block th:fragment="select(fieldName, labelText, options, selectedValue)">
+    <div class="form-group">
+      <label th:for="${fieldName}" th:text="${labelText}">Label</label>
+      <select th:id="${fieldName}" th:name="${fieldName}" class="form-control">
+        <option th:each="opt : ${options}"
+                th:value="${opt.key}"
+                th:text="${opt.value}"
+                th:selected="${opt.key == selectedValue}">
+        </option>
+      </select>
+    </div>
+  </th:block>
+</th:block>

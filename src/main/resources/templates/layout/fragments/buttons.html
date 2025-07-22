@@ -1,0 +1,14 @@
+<!-- templates/layout/fragments/buttons.html -->
+<div xmlns:th="http://www.thymeleaf.org">
+
+  <!-- Submit Button -->
+  <div class="form-group" th:fragment="submitButton(text)">
+    <button type="submit" class="btn" th:text="${text}">Submit</button>
+  </div>
+
+  <!-- Cancel Button -->
+  <div class="form-group" th:fragment="cancelButton(url)">
+    <a th:href="${url}" class="btn btn-secondary">Cancel</a>
+  </div>
+
+</div>

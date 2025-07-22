@@ -1,0 +1,114 @@
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #f1f1f1;
+  --font-color: #333;
+  --border-radius: 8px;
+  --transition: 0.3s ease;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Reset & Base */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fafafa;
+  color: var(--font-color);
+  margin: 0;
+  padding: 20px;
+}
+
+form {
+  max-width: 600px;
+  margin: auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="file"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  transition: border-color var(--transition);
+  font-size: 15px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+button,
+.btn {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 15px;
+  transition: background-color var(--transition);
+  text-decoration: none;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+button:hover,
+.btn:hover {
+  background-color: #45a049;
+}
+
+.btn-secondary {
+  background-color: #aaa;
+}
+
+.btn-secondary:hover {
+  background-color: #888;
+}
+
+/* Checkbox + Radio */
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: 8px;
+  transform: scale(1.2);
+  vertical-align: middle;
+}
+
+.checkbox-label,
+.radio-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+input[type="file"] {
+  background-color: #fff;
+  padding: 8px;
+}
+
+/* Optional spacing */
+.form-group {
+  margin-bottom: 20px;
+}
