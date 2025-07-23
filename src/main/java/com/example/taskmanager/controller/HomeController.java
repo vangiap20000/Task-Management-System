@@ -1,23 +1,29 @@
 package com.example.taskmanager.controller;
 
-import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Map;
 
 @Controller
 public class HomeController {
-	
-	@GetMapping("/")
-	public String index(Model model) {
-		model.addAttribute("pageTitle", "Trang chủ");
-		model.addAttribute("contentTemplate", "index"); // tên file template
+
+    @RequestMapping("/")
+    public String index(Model model) {
+        model.addAttribute("name", "Word");
+        return "index"; // không cần đuôi .html
+    }
+
+	@RequestMapping("/admin/common")
+    public String common(Model model) {
 		model.addAttribute("dropdownOptions", Map.of(
 			"vn", "Vietnam",
 			"jp", "Japan",
 			"us", "USA"
 		));
-		return "layout/base";
-	}
-
+        model.addAttribute("contentPage", "/common");
+	    model.addAttribute("pageTitle", "Common");
+	    model.addAttribute("currentPath", "/admin/common");
+	    return "layout/main";
+    }
 }

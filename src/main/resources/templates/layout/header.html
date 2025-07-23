@@ -1,10 +1,18 @@
 <!-- templates/layout/header.html -->
 <div th:fragment="header">
-    <header>
-        <h1>My Application</h1>
-        <nav>
-            <a href="/" th:href="@{/}">Home</a>
-            <a href="/about" th:href="@{/about}">About</a>
-        </nav>
+    <header class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-semibold" th:text="${pageTitle != null} ? ${pageTitle} : 'Dashboard'">Dashboard</h2>
+
+        <div class="relative">
+            <img th:src="@{${#authentication.principal.avatar} != null ? '/uploads/' + ${#authentication.principal.avatar} : 'https://picsum.photos/40'}" onclick="toggleMenu()" id="avatar"/>
+            <div id="logoutMenu" class="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg hidden z-50">
+                <div sec:authorize="isAuthenticated()">
+                    <a class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    th:href="@{/admin/logout}">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
     </header>
 </div>

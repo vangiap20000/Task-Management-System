@@ -1,0 +1,29 @@
+<div th:fragment="content">
+
+    <form method="post" th:action="@{/submit}" enctype="multipart/form-data">
+        
+        <!-- Input -->
+        <div th:replace="layout/fragments/form-elements :: inputText(fieldName='username', labelText='Username')"></div>
+
+        <!-- Textarea -->
+        <div th:replace="layout/fragments/form-elements :: textarea('bio', 'Bio')"></div>
+
+        <!-- File Upload -->
+        <div th:replace="layout/fragments/form-elements :: file('avatar', 'Upload Avatar')"></div>
+
+        <!-- Checkbox -->
+        <div th:replace="layout/fragments/form-elements :: checkbox('agree', 'I agree to the terms', true)"></div>
+
+        <!-- Radio Buttons -->
+        <div th:replace="layout/fragments/form-elements :: radio('gender', 'Male', 'male', 'male')"></div>
+        <div th:replace="layout/fragments/form-elements :: radio('gender', 'Female', 'female', 'male')"></div>
+
+        <!-- Select Dropdown -->
+        <div th:insert="layout/fragments/form-elements :: select('country', 'Country', ${dropdownOptions}, 'vn')"></div>
+
+        <!-- Submit Button -->
+        <div th:replace="layout/fragments/buttons :: submitButton('Save')"></div>
+        <div th:replace="layout/fragments/buttons :: cancelButton('/')"></div>
+    </form>
+
+</div>
