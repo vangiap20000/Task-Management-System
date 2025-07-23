@@ -11,7 +11,7 @@ public class HomeController {
     @RequestMapping("/")
     public String index(Model model) {
         model.addAttribute("name", "Word");
-        return "index"; // không cần đuôi .html
+        return "index";
     }
 
 	@RequestMapping("/admin/common")
