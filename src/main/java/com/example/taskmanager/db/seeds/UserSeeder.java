@@ -1,10 +1,12 @@
 package com.example.taskmanager.db.seeds;
 
 import com.example.taskmanager.model.User;
-import com.example.taskmanager.repository.UserRepository;
+import com.example.taskmanager.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserSeeder {
     @Autowired
     private UserRepository userRepository;
