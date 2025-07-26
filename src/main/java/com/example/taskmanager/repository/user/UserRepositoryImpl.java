@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class UserRepositoryImpl extends BaseRepositoryImpl<User, Long> implements UserRepository {
+public class UserRepositoryImpl extends BaseRepositoryImpl<User, Long> implements UserRepositoryCustom {
 
     @PersistenceContext
     private EntityManager entityManager;

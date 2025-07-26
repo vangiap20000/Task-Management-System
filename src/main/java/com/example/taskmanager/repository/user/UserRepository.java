@@ -5,7 +5,7 @@ import com.example.taskmanager.repository.BaseRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long>, BaseRepository<User, Long> {
-    void customMethod();
+@Repository("legacyUserRepository")
+public interface UserRepository extends JpaRepository<User, Long>, BaseRepository<User, Long>, UserRepositoryCustom {
+
 }

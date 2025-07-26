@@ -8,7 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.EntityManager;
 
 @Repository
-public class TaskRepositoryImpl extends BaseRepositoryImpl<Task, Long> implements TaskRepository {
+public class TaskRepositoryImpl extends BaseRepositoryImpl<Task, Long> implements TaskRepositoryCustom {
 
     @PersistenceContext
     private EntityManager entityManager;

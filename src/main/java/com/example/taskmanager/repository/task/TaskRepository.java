@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.taskmanager.repository.BaseRepository;   
 
 @Repository
-public interface TaskRepository extends JpaRepository<Task, Long>, BaseRepository<Task, Long> {
-    void customMethod();
+public interface TaskRepository extends JpaRepository<Task, Long>, BaseRepository<Task, Long>, TaskRepositoryCustom {
+
 }
