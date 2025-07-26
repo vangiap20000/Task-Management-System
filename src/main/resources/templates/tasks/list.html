@@ -1,3 +1,126 @@
 <div th:fragment="content">
-    <h1>Danh sách thành viên</h1>
+    <div th:if="${message}" th:class="'alert alert-' + ${messageType}" role="alert">
+        <p th:text="${message}"></p>
+    </div>
+    <div class="mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <a href="#"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex align-items-center">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M8 1a.5.5 0 01.5.5V7h5.5a.5.5 0 010 1H8.5v5.5a.5.5 0 01-1 0V8H2a.5.5 0 010-1h5.5V1.5A.5.5 0 018 1z" />
+            </svg>
+            Add New Task
+        </a>
+
+        <form class="flex gap-2 w-full sm:w-auto search-list">
+            <input type="text" placeholder="Search tasks..." name="search_value" th:value="${searchValue}"
+                class="w-64 h-10 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500" />
+            <div th:replace="layout/fragments/buttons :: submitButton('Search')"></div>
+        </form>
+    </div>
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 text-sm">
+            <thead>
+                <tr class="bg-gray-100 text-left text-sm">
+                    <th class="px-4 py-2 border cursor-pointer">
+                        <a class="flex items-center gap-1"
+                            th:with="sortValue=(${sortBy == 'id' && sortValue == 'asc'} ? 'desc' : 'asc')"
+                            th:href="'?search_value=' + ${searchValue} + '&sort_by=id&sort_value=' + ${sortValue}">
+                            Id
+                            <th:block
+                                th:with="setColor = (${sortBy == 'id'} ? 'text-blue-800' : 'text-gray-400 opacity-50')">
+                                <span
+                                    th:replace="layout/fragments/icons_svg :: iconSort(type=${sortValue}, color=${setColor})"></span>
+                            </th:block>
+                        </a>
+                    </th>
+                    <th class="px-4 py-2 border cursor-pointer">
+                        <a class="flex items-center gap-1"
+                            th:with="sortValue=(${sortBy == 'title' && sortValue == 'asc'} ? 'desc' : 'asc')"
+                            th:href="'?search_value=' + ${searchValue} + '&sort_by=title&sort_value=' + ${sortValue}">
+                            Title
+                            <th:block
+                                th:with="setColor = (${sortBy == 'title'} ? 'text-blue-800' : 'text-gray-400 opacity-50')">
+                                <span
+                                    th:replace="layout/fragments/icons_svg :: iconSort(type=${sortValue}, color=${setColor})"></span>
+                            </th:block>
+                        </a>
+                    </th>
+                    <th class="px-4 py-2 border cursor-pointer">
+                        <a class="flex items-center gap-1"
+                            th:with="sortValue=(${sortBy == 'dueDate' && sortValue == 'asc'} ? 'desc' : 'asc')"
+                            th:href="'?search_value=' + ${searchValue} + '&sort_by=dueDate&sort_value=' + ${sortValue}">
+                            Due Date
+                            <th:block
+                                th:with="setColor = (${sortBy == 'dueDate'} ? 'text-blue-800' : 'text-gray-400 opacity-50')">
+                                <span
+                                    th:replace="layout/fragments/icons_svg :: iconSort(type=${sortValue}, color=${setColor})"></span>
+                            </th:block>
+                        </a>
+                    </th>
+                    <th class="px-4 py-2 border">Priority</th>
+                    <th class="px-4 py-2 border">Status</th>
+                    <th class="px-4 py-2 border cursor-pointer">
+                        <a class="flex items-center gap-1"
+                            th:with="sortValue=(${sortBy == 'createdAt' && sortValue == 'asc'} ? 'desc' : 'asc')"
+                            th:href="'?search_value=' + ${searchValue} + '&sort_by=createdAt&sort_value=' + ${sortValue}">
+                            Created At
+                            <th:block
+                                th:with="setColor = (${sortBy == 'createdAt'} ? 'text-blue-800' : 'text-gray-400 opacity-50')">
+                                <span
+                                    th:replace="layout/fragments/icons_svg :: iconSort(type=${sortValue}, color=${setColor})"></span>
+                            </th:block>
+                        </a>
+                    </th>
+                    <th class="px-4 py-2 border">Actions</th>
+                </tr>
+
+            </thead>
+            <tbody id="myTable">
+                <tr th:each="task : ${tasks}" class="hover:bg-gray-50">
+                    <td class="px-4 py-2 border" th:text="${task.id}"></td>
+                    <td class="px-4 py-2 border" th:text="${task.title}"></td>
+                    <td class="px-4 py-2 border" th:text="${task.dueDate}"></td>
+                    <td class="px-4 py-2 border" th:switch="${task.priority}">
+                        <span
+                            class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs text-yellow-800 border border-yellow-600/20 font-semibold"
+                            th:case="0">Low</span>
+                        <span
+                            class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs text-green-700 border border-green-600/20 font-semibold"
+                            th:case="1">Medium</span>
+                        <span
+                            class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs text-red-700 border border-red-600/10 font-semibold"
+                            th:case="2">High</span>
+                    </td>
+                    <td class="px-4 py-2 border" th:switch="${task.status}">
+                        <span
+                            class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs text-gray-600 border border-gray-500/10 font-semibold"
+                            th:case="0">Not Started</span>
+                        <span
+                            class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs text-blue-700 border border-blue-700/10 font-semibold"
+                            th:case="1">In Progress</span>
+                        <span
+                            class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs text-green-700 border border-green-600/20 font-semibold"
+                            th:case="2">Completed</span>
+                    </td>
+                    <td class="px-4 py-2 border" th:text="${task.createdAt}"></td>
+                    <td class="px-4 py-2 border space-x-2">
+                        <a th:href="'tasks/' + ${task.id}"
+                            class="px-3 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600">Edit</a>
+                        <th:block
+                            th:replace="layout/fragments/modal_confirm :: buttonTrigger(url=${'tasks/' + task.id}, class='px-3 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600')">
+                        </th:block>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Pagination -->
+    <th:block th:replace="layout/fragments/pagination :: pagination(${tasks}, '/admin/tasks', ${paginationParams})">
+    </th:block >
+
+    <!-- Modal -->
+    <th:block th:replace="layout/fragments/modal_confirm :: modal">
+    </th:block>
 </div>

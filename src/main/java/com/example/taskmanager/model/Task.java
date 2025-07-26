@@ -63,6 +63,8 @@ public class Task {
     )
     private Set<Label> labels = new HashSet<>();
 
+    public Task() {}
+
     public Task(int id, User user, String title, String description, LocalDate dueDate, String photo,
                 int status, int priority, Category category,
                 LocalDateTime createdAt, LocalDateTime updatedAt) {

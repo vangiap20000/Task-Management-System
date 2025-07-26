@@ -1,0 +1,28 @@
+<div th:fragment="pagination(pageObj, baseUrl, params)" class="flex justify-center mt-6"
+    th:if="${pageObj.totalPages > 1}">
+
+    <nav class="inline-flex -space-x-px text-sm" aria-label="Pagination">
+
+        <!-- Previous -->
+        <a th:href="${baseUrl} + '?page=' + ${pageObj.number} + ${params}"
+            class="px-3 py-2 border border-gray-300 rounded-l hover:bg-gray-100"
+            th:classappend="${pageObj.first} ? ' opacity-50 pointer-events-none' : ''">
+            &laquo;
+        </a>
+
+        <!-- Page numbers -->
+        <th:block th:each="i : ${#numbers.sequence(1, pageObj.totalPages)}">
+            <a th:href="${baseUrl} + '?page=' + ${i} + ${params}" th:text="${i}"
+                class="px-3 py-2 border border-gray-300 hover:bg-gray-100"
+                th:classappend="${i == pageObj.number + 1} ? ' bg-blue-600 text-white' : ''">
+            </a>
+        </th:block>
+
+        <!-- Next -->
+        <a th:href="${baseUrl} + '?page=' + ${pageObj.number + 2} + ${params}"
+            class="px-3 py-2 border border-gray-300 rounded-r hover:bg-gray-100"
+            th:classappend="${pageObj.last} ? ' opacity-50 pointer-events-none' : ''">
+            &raquo;
+        </a>
+    </nav>
+</div>

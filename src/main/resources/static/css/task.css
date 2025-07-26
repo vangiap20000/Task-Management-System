@@ -1,0 +1,7 @@
+.search-list .form-group {
+    margin: 0;
+}
+
+.disabled {
+    opacity: 0.5;
+}

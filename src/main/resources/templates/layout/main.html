@@ -12,6 +12,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <link rel="stylesheet" th:href="@{/css/admin.css}">
+
+    <th:block th:if="${customCssList != null}">
+        <link th:each="css : ${customCssList}" th:href="@{${css}}" rel="stylesheet" />
+    </th:block>
 </head>
 <body class="flex">
     <!-- Sidebar cố định -->
@@ -33,6 +37,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- <script th:src="@{/js/scripts.js}"></script> -->
+
+    <script th:src="@{/js/main.js}"></script>
 
     <script>
         function toggleMenu() {
