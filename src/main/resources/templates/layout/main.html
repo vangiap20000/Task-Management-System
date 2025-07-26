@@ -12,6 +12,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <link rel="stylesheet" th:href="@{/css/admin.css}">
+
+    <th:block th:if="${customCssList != null}">
+        <link th:each="css : ${customCssList}" th:href="@{${css}}" rel="stylesheet" />
+    </th:block>
 </head>
 <body class="flex">
     <!-- Sidebar cố định -->

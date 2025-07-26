@@ -41,6 +41,37 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="py-2 px-4 hover:bg-gray-700">
+                    <div class="flex items-center justify-between cursor-pointer"
+                        onclick="toggleSubmenu('taskSubmenu')">
+                        <div class="flex items-center">
+                            <i class="fas fa-tasks"></i>
+                            <span
+                                th:classappend="${#strings.startsWith(currentPath, '/admin/tasks')} ? 'text-blue-500 font-semibold' : ''"
+                                class="ml-2">
+                                Tasks
+                            </span>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <ul id="taskSubmenu" class="ml-6 mt-2 transition-all duration-300 overflow-hidden"
+                        th:style="${#strings.startsWith(currentPath, '/admin/tasks')} ? 'display: block;' : 'display: none;'">
+                        <li class="py-1">
+                            <a th:href="@{/admin/tasks}"
+                                th:classappend="${currentPath == '/admin/tasks'} ? 'text-blue-400 font-bold underline' : ''">
+                                List
+                            </a>
+                        </li>
+                        <li class="py-1">
+                            <a th:href="@{/admin/tasks/create}"
+                                th:classappend="${currentPath == '/admin/tasks/create'} ? 'text-blue-400 font-bold underline' : ''">
+                                Create
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="flex items-center py-2 px-4 hover:bg-gray-700">
                     <i class="fas fa-boxes"></i>
                     <a href="/admin/common" class="ml-2">Common</a>
