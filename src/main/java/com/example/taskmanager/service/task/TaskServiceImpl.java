@@ -3,11 +3,15 @@ package com.example.taskmanager.service.task;
 import com.example.taskmanager.repository.task.TaskRepository;
 import org.springframework.stereotype.Service;
 import com.example.taskmanager.model.Task;
+import com.example.taskmanager.model.User;
+import com.example.taskmanager.model.CustomUserDetails;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -34,7 +38,11 @@ public class TaskServiceImpl implements TaskService {
         Sort sort = Sort.by(Sort.Direction.fromString(sortValue), sortBy);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        return taskRepository.findByTitleLike(searchValue, pageable);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails currentUserDetails = (CustomUserDetails) auth.getPrincipal();
+        User currentUser = currentUserDetails.getUser();
+
+        return taskRepository.findByUserAndTitleLike(currentUser, searchValue, pageable);
     }
 
     public Boolean delete(Long id) {

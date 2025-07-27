@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, rgba(248, 74, 255, 0.4), rgba(39, 174, 96, 0.4), rgba(56, 79, 255, 0.4));
+            background-size: 400% 400%;
+            animation: gradientAnimation 6s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex justify-center items-center">
+
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full sm:w-2/5 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+        <div class="text-center mb-6">
+            <img src="https://img.icons8.com/ios/452/error.png" alt="Error" class="mx-auto mb-4 w-16 h-16"/>
+            <h2 class="text-4xl font-semibold text-gray-800 mb-4">Oops! Something went wrong</h2>
+            <p class="text-lg text-gray-600 mb-6">We encountered an issue while processing your request. Please try again later.</p>
+        </div>
+
+        <div class="bg-red-100 p-4 rounded-lg mb-6 text-center">
+            <strong class="text-red-700">Error Details:</strong>
+            <p th:text="${errorMessage}" class="mt-2 text-sm text-gray-700 font-mono"></p>
+        </div>
+
+        <div class="flex justify-center">
+            <a href="/" class="bg-blue-500 text-white hover:bg-blue-600 py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">Back to Home</a>
+        </div>
+    </div>
+
+</body>
+</html>

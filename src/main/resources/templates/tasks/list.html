@@ -78,6 +78,12 @@
 
             </thead>
             <tbody id="myTable">
+                <tr th:if="${#lists.isEmpty(tasks.content)}">
+                    <td colspan="7" class="text-center text-gray-500 py-6 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
+                        <span class="text-xl font-semibold text-gray-700">No data available</span>
+                    </td>
+                </tr>
+
                 <tr th:each="task : ${tasks}" class="hover:bg-gray-50">
                     <td class="px-4 py-2 border" th:text="${task.id}"></td>
                     <td class="px-4 py-2 border" th:text="${task.title}"></td>
