@@ -6,6 +6,7 @@ import com.example.taskmanager.service.task.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 import java.util.List;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import com.example.taskmanager.requests.TaskFormRequest;
 
 @Controller
 @RequestMapping("/admin/tasks")
@@ -58,6 +62,38 @@ public class TaskController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", "Error deleting task: " + e.getMessage());
             redirectAttributes.addFlashAttribute("messageType", "error");
+        }
+
+        return "redirect:/admin/tasks"; 
+    }
+
+    @GetMapping("/create")
+    public String create(Model model) {
+        model.addAttribute("taskFormRequest", new TaskFormRequest());
+
+        model.addAttribute("contentPage", "tasks/create");
+	    model.addAttribute("pageTitle", "Create new Task");
+	    model.addAttribute("currentPath", "/admin/tasks/create");
+        model.addAttribute("customCssList", List.of(
+            "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css",
+            "https://cdn.jsdelivr.net/gh/erimicel/select2-tailwindcss-theme/dist/select2-tailwindcss-theme-plain.min.css",
+            "/css/task.css"
+        ));
+
+        model.addAttribute("customJsList", List.of(
+            "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"
+        ));
+
+	    return "layout/main";
+    }
+
+
+    @PostMapping("/create")
+    public String store(@Valid TaskFormRequest taskFormRequest, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("taskFormRequest", taskFormRequest);
+
+            return "tasks/create"; 
         }
 
         return "redirect:/admin/tasks"; 
