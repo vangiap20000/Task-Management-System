@@ -17,6 +17,7 @@ import java.util.List;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import com.example.taskmanager.requests.TaskFormRequest;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 @RequestMapping("/admin/tasks")
@@ -68,8 +69,8 @@ public class TaskController {
     }
 
     @GetMapping("/create")
-    public String create(Model model) {
-        model.addAttribute("taskFormRequest", new TaskFormRequest());
+    public String create(Model model, TaskFormRequest taskFormRequest) {
+        model.addAttribute("taskFormRequest", taskFormRequest);
 
         model.addAttribute("contentPage", "tasks/create");
 	    model.addAttribute("pageTitle", "Create new Task");
@@ -93,7 +94,7 @@ public class TaskController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("taskFormRequest", taskFormRequest);
 
-            return "tasks/create"; 
+            return this.create(model, taskFormRequest);
         }
 
         return "redirect:/admin/tasks"; 
