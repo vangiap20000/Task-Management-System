@@ -14,6 +14,11 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
+
+    public User getUser() {
+        return user;
+    }
+
     public String getAvatar() {
         return user.getAvatar();
     }
