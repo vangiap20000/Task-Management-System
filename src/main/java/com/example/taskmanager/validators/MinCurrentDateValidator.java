@@ -2,17 +2,17 @@ package com.example.taskmanager.validators;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import java.util.Date;
+import java.time.LocalDate;
 
-public class MinCurrentDateValidator implements ConstraintValidator<ValidMinCurrentDate, Date> {
+public class MinCurrentDateValidator implements ConstraintValidator<ValidMinCurrentDate, LocalDate> {
 
     @Override
-    public boolean isValid(Date value, ConstraintValidatorContext context) {
+    public boolean isValid(LocalDate value, ConstraintValidatorContext context) {
         if (value == null) {
             return true;
         }
 
-        Date currentDate = new Date();
-        return !value.before(currentDate);
+        LocalDate currentDate = LocalDate.now();
+        return !value.isBefore(currentDate);
     }
 }

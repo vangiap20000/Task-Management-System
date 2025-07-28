@@ -1,4 +1,6 @@
 <div th:fragment="content">
+    <th:block th:replace="layout/fragments/alert :: alertSimpl(${message}, ${messageType})">
+    </th:block>
     <form action="#" th:action="@{/admin/tasks/create}" th:object="${taskFormRequest}" method="post" enctype="multipart/form-data"
         class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
@@ -86,7 +88,7 @@
             <span class="invalid-feedback" th:if="${#fields.hasErrors('labelId')}" th:errors="*{labelId}"></span>
         </div>
 
-        <!-- <div class="mb-4">
+        <div class="mb-4">
             <label for="photo" class="block text-sm font-medium text-gray-700">Upload Photo</label>
             <input type="file" id="photo" th:field="*{photo}"accept="image/*"
                 th:classappend="${#fields.hasErrors('photo') ? 'is-invalid' : ''}"
@@ -96,7 +98,7 @@
             <div id="imagePreview" class="mt-4">
                 <img id="preview" src="" alt="Image Preview" class="hidden max-w-full h-auto rounded-lg shadow-sm">
             </div>
-        </div> -->
+        </div>
 
         <div class="flex gap-2 justify-end">
             <a th:href="@{/admin/tasks}"

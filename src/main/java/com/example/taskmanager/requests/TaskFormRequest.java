@@ -1,7 +1,7 @@
 package com.example.taskmanager.requests;
 
 import jakarta.validation.constraints.*;
-import java.util.Date;
+import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile; 
 import com.example.taskmanager.validators.ValidFile;
@@ -16,14 +16,12 @@ public class TaskFormRequest {
     @Size(max = 255, message = "Title cannot be longer than 255 characters")
     private String title;
 
-    @NotBlank(message = "Description is required")
     private String description;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Due Date is required")
     @ValidMinCurrentDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @PastOrPresent(message = "Due date must be in the past or present")
-    private Date dueDate;
+    private LocalDate dueDate;
 
     @ValidFile
     private MultipartFile photo;
@@ -62,11 +60,11 @@ public class TaskFormRequest {
         this.description = description;
     }
 
-    public Date getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 

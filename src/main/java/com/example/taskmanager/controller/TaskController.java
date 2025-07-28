@@ -42,7 +42,7 @@ public class TaskController {
         @RequestParam(name = "page", required = false, defaultValue="1") int page,
         @RequestParam(name = "search_value", required = false, defaultValue="") String searchValue,
         @RequestParam(name = "sort_by", required = false, defaultValue="") String sortBy,
-        @RequestParam(name = "sort_value", required = false, defaultValue = "asc") String sortValue,
+        @RequestParam(name = "sort_value", required = false, defaultValue = "desc") String sortValue,
         Model model
     ) {
         
@@ -73,7 +73,7 @@ public class TaskController {
             redirectAttributes.addFlashAttribute("messageType", "success");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", "Error deleting task: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("messageType", "error");
+            redirectAttributes.addFlashAttribute("messageType", "danger");
         }
 
         return "redirect:/admin/tasks"; 
@@ -98,7 +98,8 @@ public class TaskController {
         ));
 
         model.addAttribute("customJsList", List.of(
-            "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"
+            "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js",
+            "/js/task.js"
         ));
 
 	    return "layout/main";
@@ -106,18 +107,35 @@ public class TaskController {
 
 
     @PostMapping("/create")
-    public String store(@Valid TaskFormRequest taskFormRequest, BindingResult bindingResult, Model model) {
+    public String store(
+        @Valid TaskFormRequest taskFormRequest,
+        BindingResult bindingResult,
+        RedirectAttributes redirectAttributes,
+        Model model
+    ) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("taskFormRequest", taskFormRequest);
 
             return this.create(model, taskFormRequest);
         }
 
-        MultipartFile photo = taskFormRequest.getPhoto();
-        if (photo != null && !photo.isEmpty()) {
-            
-        }
+        try {
+            Boolean result = taskService.store(taskFormRequest);
+            if (!result) {
+                redirectAttributes.addFlashAttribute("message", "Error creating task!");
+                redirectAttributes.addFlashAttribute("messageType", "danger");
+                return "redirect:/admin/tasks/create"; 
+            }
 
-        return "redirect:/admin/tasks"; 
+            redirectAttributes.addFlashAttribute("message", "Task created successfully!");
+            redirectAttributes.addFlashAttribute("messageType", "success");
+
+            return "redirect:/admin/tasks";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", "Error creating task: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("messageType", "danger");
+
+            return "redirect:/admin/tasks/create"; 
+        }
     }
 }
