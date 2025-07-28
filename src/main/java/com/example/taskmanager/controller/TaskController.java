@@ -1,8 +1,12 @@
 package com.example.taskmanager.controller;
 
 import com.example.taskmanager.model.Task;
+import com.example.taskmanager.model.Label;
+import com.example.taskmanager.model.Category;
 import org.springframework.data.domain.Page;
 import com.example.taskmanager.service.task.TaskService;
+import com.example.taskmanager.service.label.LabelService;
+import com.example.taskmanager.service.category.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +22,7 @@ import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import com.example.taskmanager.requests.TaskFormRequest;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/admin/tasks")
@@ -25,6 +30,12 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private LabelService labelService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping
     public String index(
@@ -72,6 +83,11 @@ public class TaskController {
     public String create(Model model, TaskFormRequest taskFormRequest) {
         model.addAttribute("taskFormRequest", taskFormRequest);
 
+        List<Label> labels = labelService.getAll();
+        List<Category> categories = categoryService.getAll();
+
+        model.addAttribute("labels", labels);
+        model.addAttribute("categories", categories);
         model.addAttribute("contentPage", "tasks/create");
 	    model.addAttribute("pageTitle", "Create new Task");
 	    model.addAttribute("currentPath", "/admin/tasks/create");
@@ -95,6 +111,11 @@ public class TaskController {
             model.addAttribute("taskFormRequest", taskFormRequest);
 
             return this.create(model, taskFormRequest);
+        }
+
+        MultipartFile photo = taskFormRequest.getPhoto();
+        if (photo != null && !photo.isEmpty()) {
+            
         }
 
         return "redirect:/admin/tasks"; 

@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.taskmanager.validators.ValidFile;
 import com.example.taskmanager.validators.ValidCategoryId;
 import com.example.taskmanager.validators.ValidLabelIds;
+import com.example.taskmanager.validators.ValidMinCurrentDate;
 
 
 public class TaskFormRequest {
@@ -19,6 +20,7 @@ public class TaskFormRequest {
     private String description;
 
     @NotNull(message = "Due Date is required")
+    @ValidMinCurrentDate
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @PastOrPresent(message = "Due date must be in the past or present")
     private Date dueDate;
