@@ -138,4 +138,35 @@ public class TaskController {
             return "redirect:/admin/tasks/create"; 
         }
     }
+
+    @GetMapping("/{id}")
+    public String edit(
+        @PathVariable Long id,
+        Model model, TaskFormRequest taskFormRequest
+    ) {
+        model.addAttribute("taskFormRequest", taskFormRequest);
+
+        Task task = taskService.detail(id);
+        List<Label> labels = labelService.getAll();
+        List<Category> categories = categoryService.getAll();
+
+        model.addAttribute("task", task);
+        model.addAttribute("labels", labels);
+        model.addAttribute("categories", categories);
+        model.addAttribute("contentPage", "tasks/edit");
+        model.addAttribute("currentPath", "/admin/tasks/{id}");
+	    model.addAttribute("pageTitle", "Details of the Task");
+        model.addAttribute("customCssList", List.of(
+            "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css",
+            "https://cdn.jsdelivr.net/gh/erimicel/select2-tailwindcss-theme/dist/select2-tailwindcss-theme-plain.min.css",
+            "/css/task.css"
+        ));
+
+        model.addAttribute("customJsList", List.of(
+            "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js",
+            "/js/task.js"
+        ));
+
+	    return "layout/main";
+    }
 }

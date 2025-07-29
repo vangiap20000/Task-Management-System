@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.example.taskmanager.requests.TaskFormRequest;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -132,4 +134,14 @@ public class TaskServiceImpl implements TaskService {
             throw new IOException("Failed to upload file: " + e.getMessage());
         }
     }
+
+    public Task detail(Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails currentUserDetails = (CustomUserDetails) auth.getPrincipal();
+        User currentUser = currentUserDetails.getUser();
+
+        Optional<Task> task =  taskRepository.findFirstByUserAndId(currentUser, id);
+
+        return task.orElseThrow(() -> new EntityNotFoundException("Task with ID " + id + " not found"));
+    };
 }

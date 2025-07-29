@@ -13,4 +13,6 @@ public interface TaskService {
     public Boolean delete(Long id);
 
     public Boolean store(TaskFormRequest taskFormRequest);
+
+    public Task detail(Long id);
 }
