@@ -8,7 +8,9 @@ import com.example.taskmanager.validators.ValidFile;
 import com.example.taskmanager.validators.ValidCategoryId;
 import com.example.taskmanager.validators.ValidLabelIds;
 import com.example.taskmanager.validators.ValidMinCurrentDate;
-
+import com.example.taskmanager.model.Task;
+import com.example.taskmanager.model.Label;
+import java.util.stream.Collectors;
 
 public class TaskFormRequest {
 
@@ -26,6 +28,8 @@ public class TaskFormRequest {
     @ValidFile
     private MultipartFile photo;
 
+    private String photoUrl;
+
     @NotNull(message = "Status is required")
     @Min(value = 0, message = "Status must be between 0 and 2")
     @Max(value = 2, message = "Status must be between 0 and 2")
@@ -42,6 +46,32 @@ public class TaskFormRequest {
 
     @ValidLabelIds
     private Long[] labelId;
+
+    public TaskFormRequest() {
+
+    }
+
+    public TaskFormRequest(Task task) {
+        this.title = task.getTitle();
+        this.description = task.getDescription();
+        this.dueDate = task.getDueDate();
+        this.photoUrl = task.getPhoto();
+        this.status = task.getStatus();
+        this.priority = task.getPriority();
+
+        if(task.getCategory() != null) {
+            this.categoryId = (long) task.getCategory().getId(); 
+        }
+
+        if(task.getLabels() != null) {
+            Long[] labelIds = task.getLabels().stream()
+                .map(Label::getId)
+                .map(id -> Long.valueOf(id))
+                .toArray(Long[]::new);
+            this.labelId = labelIds;
+        }
+    }
+
 
 
     public String getTitle() {
@@ -74,6 +104,14 @@ public class TaskFormRequest {
 
     public void setPhoto(MultipartFile photo) {
         this.photo = photo;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
     public Integer getStatus() {

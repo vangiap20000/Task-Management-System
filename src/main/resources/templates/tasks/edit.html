@@ -1,104 +1,14 @@
 <div th:fragment="content">
     <th:block th:replace="layout/fragments/alert :: alertSimpl(${message}, ${messageType})">
     </th:block>
-    <form action="#" th:action="@{/admin/tasks/create}" th:object="${taskFormRequest}" method="post" enctype="multipart/form-data"
+    <form action="#" th:action="@{/admin/tasks/{id}(id=${task.id})}"th:object="${taskFormRequest}" method="post" enctype="multipart/form-data"
         class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <input type="hidden" name="_method" value="put" />
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" name="deleteFile" id="deleteFile">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Task Information</h2>
-
-        <div class="mb-4">
-            <label for="title" class="block text-sm font-medium text-gray-700">Task Title<span class="text-red-500">*</span></label>
-            <input type="text" id="title" th:field="*{title}"
-                class="mt-1 block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                th:classappend="${#fields.hasErrors('title') ? 'form-control is-invalid' : ''}"
-                placeholder="Task Title">
-
-            <span class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
-        </div>
-
-        <div class="mb-4">
-            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-            <textarea id="description" th:field="*{description}"
-                th:classappend="${#fields.hasErrors('description') ? 'form-control is-invalid' : ''}"
-                class="mt-1 block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Task description (optional)"></textarea>
-
-            <span class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
-        </div>
-
-        <div class="mb-4">
-            <label for="due_date" class="block text-sm font-medium text-gray-700">Due Date<span class="text-red-500">*</span></label>
-            <input type="date" id="due_date" th:field="*{dueDate}" placeholder="YYYY-MM-DD"
-                th:classappend="${#fields.hasErrors('dueDate') ? 'form-control is-invalid' : ''}"
-                class="mt-1 block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-            
-            <span class="invalid-feedback" th:if="${#fields.hasErrors('dueDate')}" th:errors="*{dueDate}"></span>
-        </div>
-
-        <div class="mb-4">
-            <label for="priority" class="block text-sm font-medium text-gray-700">Priority<span class="text-red-500">*</span></label>
-            <select id="priority" th:field="*{priority}"
-                th:classappend="${#fields.hasErrors('priority') ? 'form-control is-invalid' : ''}"
-                class="bg-white mt-1 block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                <option value="0">Low</option>
-                <option value="1">Medium</option>
-                <option value="2">High</option>
-            </select>
-
-            <span class="invalid-feedback" th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}"></span>
-        </div>
-
-        <div class="mb-4">
-            <label for="status" class="block text-sm font-medium text-gray-700">Status<span class="text-red-500">*</span></label>
-            <select id="status" th:field="*{status}"
-                th:classappend="${#fields.hasErrors('status') ? 'form-control is-invalid' : ''}"
-                class="bg-white mt-1 block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                <option value="0">Not Started</option>
-                <option value="1">In Progress</option>
-                <option value="2">Completed</option>
-            </select>
-
-            <span class="invalid-feedback" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
-        </div>
-
-        <div class="mb-4">
-            <label for="category_id" class="block text-sm font-medium text-gray-700">Category<span class="text-red-500">*</span></label>
-            <select id="category_id" th:field="*{categoryId}"
-                th:classappend="${#fields.hasErrors('categoryId') ? 'form-control is-invalid' : ''}"
-                class="bg-white mt-1 block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                <th:block th:each="category : ${categories}">
-                    <option th:value="${category.id}" th:text="${category.name}"></option>
-                </th:block>
-            </select>
-
-            <span class="invalid-feedback" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></span>
-        </div>
-
-        <div class="mb-4">
-            <label for="label_id" class="block text-sm font-medium text-gray-700">Labels</label>
-            <select id="label_id" th:field="*{labelId}"
-                th:classappend="${#fields.hasErrors('labelId') ? 'form-control is-invalid' : ''}"
-                multiple="multiple"
-                class="bg-white mt-1 block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                <th:block th:each="label : ${labels}">
-                    <option th:value="${label.id}" th:text="${label.name}"></option>
-                </th:block>
-            </select>
-
-            <span class="invalid-feedback" th:if="${#fields.hasErrors('labelId')}" th:errors="*{labelId}"></span>
-        </div>
-
-        <div class="mb-4">
-            <label for="photo" class="block text-sm font-medium text-gray-700">Upload Photo</label>
-            <input type="file" id="photo" th:field="*{photo}"accept="image/*"
-                th:classappend="${#fields.hasErrors('photo') ? 'is-invalid' : ''}"
-                class="mt-1 block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 form-control "
-                onchange="previewImage(event)">
-            <span class="invalid-feedback" th:if="${#fields.hasErrors('photo')}" th:errors="*{photo}"></span>
-            <div id="imagePreview" class="mt-4">
-                <img id="preview" src="" alt="Image Preview" class="hidden max-w-full h-auto rounded-lg shadow-sm">
-            </div>
-        </div>
+        <th:block th:replace="tasks/includes/form :: form">
+        </th:block>
 
         <div class="flex gap-2 justify-end">
             <a th:href="@{/admin/tasks}"

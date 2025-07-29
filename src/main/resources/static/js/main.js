@@ -13,11 +13,25 @@ function previewImage(event) {
 
     reader.onload = function (e) {
         const preview = document.getElementById('preview');
+        const removeImageBtn = document.getElementById('removeImageBtn');
         preview.src = e.target.result;
         preview.classList.remove('hidden');
+        removeImageBtn.classList.remove('hidden');
     };
 
     if (file) {
         reader.readAsDataURL(file);
     }
+}
+
+function removeImage() {
+    const isDeleteFile = 1;
+    const preview = document.getElementById('preview');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    const photo = document.getElementById('photo');
+
+    preview.classList.add('hidden');
+    removeImageBtn.classList.add('hidden');
+    photo.value = '';
+    document.getElementById('deleteFile').value = isDeleteFile;
 }

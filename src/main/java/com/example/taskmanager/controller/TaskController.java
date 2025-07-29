@@ -142,13 +142,14 @@ public class TaskController {
     @GetMapping("/{id}")
     public String edit(
         @PathVariable Long id,
-        Model model, TaskFormRequest taskFormRequest
+        Model model
     ) {
-        model.addAttribute("taskFormRequest", taskFormRequest);
-
         Task task = taskService.detail(id);
         List<Label> labels = labelService.getAll();
         List<Category> categories = categoryService.getAll();
+        TaskFormRequest taskFormRequest =  new TaskFormRequest(task);
+  
+        model.addAttribute("taskFormRequest", taskFormRequest);
 
         model.addAttribute("task", task);
         model.addAttribute("labels", labels);
