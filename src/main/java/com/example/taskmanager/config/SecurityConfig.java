@@ -32,13 +32,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/admin/login", "/images/**", "/css/**").permitAll()
+                .requestMatchers("/admin/login", "/admin/register", "/images/**", "/css/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/admin/login")
                 .loginProcessingUrl("/admin/login")
-                .defaultSuccessUrl("/admin/users", true)
+                .defaultSuccessUrl("/admin/tasks", true)
                 .failureUrl("/admin/login?error=true")
                 .permitAll()
             )

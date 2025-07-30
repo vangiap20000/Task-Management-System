@@ -12,6 +12,9 @@
 <body>
 
     <h1>LOGIN FORM</h1>
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
     <div class="w3layoutscontaineragileits">
         <h2>Login</h2>
 
@@ -33,6 +36,11 @@
 
             <div class="aitssendbuttonw3ls">
                 <input type="submit" value="LOGIN">
+            </div>
+
+            <div class="registerbuttonw3ls">
+                <a href="/admin/register" class="w3lsbutton">Not a member? Register here</a>
+            </div>
             </div>
         </form>
     </div>

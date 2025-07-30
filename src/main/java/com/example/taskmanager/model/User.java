@@ -5,6 +5,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -14,17 +18,23 @@ public class User {
     private int id;
 
     @Column(nullable = false, length = 100)
+    @NotBlank(message = "Name must not be empty")
     private String name;
 
     private String avatar;
 
     @Column(nullable = false, length = 100, unique = true)
+    @NotBlank(message = "Email must not be empty")
+    @Email(message = "Invalid email address")
     private String email;
 
     @Column(name = "password", nullable = false)
+    @NotBlank(message = "Password must not be empty")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
     @Column(length = 13)
+    @Size(max = 13, message = "Phone number must be at most 13 characters long")
     private String phone;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
@@ -85,9 +95,9 @@ public class User {
         return password;
     }
 
-    public void setPasswordHash(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) {
+    this.password = password;
+}
 
     public String getPhone() {
         return phone;
