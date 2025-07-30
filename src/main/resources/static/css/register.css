@@ -38,17 +38,10 @@
 /*-- Index-Page-Styling --*/
 
 body {
-	background: url("../images/b2.jpg");
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-position: center;
-	background-size: cover;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
 	color: #FFF;
 	font-family: 'Quicksand', sans-serif;
 	text-align: center;
+    background:#f2f2f2;
 }
 
 body a {
@@ -68,19 +61,10 @@ input[type="button"], input[type="submit"] {
 	-ms-transition: 0.5s all;
 }
 
-h1 {
-    font-size: 45px;
-    font-weight: 300;
-    color: #fff;
-    letter-spacing: 7px;
-    margin: 65px auto;
-}
-
 .w3layoutscontaineragileits {
-    width: 30%;
-    margin: 0 auto;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 30px;
+    width: 40%;
+    margin: 50px auto;
+    padding: 20px;
 }
 
 h2 {
@@ -93,27 +77,12 @@ h2 {
 
 input[type="text"], input[type="password"], input[type="email"]{
 	width: 84%;
-	padding: 15px 10px 15px;
+	padding: 10px;
 	font-size: 14px;
 	background: transparent;
-	border: 2px solid #537b35;
+	border: 1px solid #537b35;
 	outline: none;
-	margin-bottom: 26px;
-	color: #fff;
 	font-family: 'Quicksand', sans-serif;
-}
-input[type="text"]{
-	background: url("../images/user.png") no-repeat 95% 11px;
-	background-size: 25px;
-}
-input[type="email"] {
-	background: url("../images/e-mail.png") no-repeat 95% 11px;
-	background-size: 25px;
-}
-
-input[type="password"] {
-	background: url("../images/password.png") no-repeat 95% 11px;
-	background-size: 25px;
 }
 
 ul.agileinfotickwthree {
@@ -368,38 +337,38 @@ input[type="checkbox"] {
     text-decoration: underline;
 }
 
+.title-register {
+    font-size: 32px;
+    color: #000;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
 #frm-register .form-label {
 	text-align: left !important;
-	color: #fff;
+	color: #000;
 	font-size: 14px;
 	display: block;
-	margin: 0 0 10px 32px ;
+	margin: 20px 0 10px;
 }
 
-.alert.alert-success {
-    width: 30%;
-    margin: 0 auto 10px;
+.error-validate {
     text-align: left;
-    display: block;
-    background: green;
-    padding: 10px 30px;
+    font-size: 14px;
+    margin-top: 5px;
 }
-
-.alert.alert-success span {
-    color: #fff;
-}
-
 /*--- Responsive Code ---*/
 
 @media screen and (max-width: 1440px) {
 	.w3layoutscontaineragileits {
-		width: 33%;
+		width: 40%;
 	}
 }
 
 @media screen and (max-width: 1366px) {
 	.w3layoutscontaineragileits {
-		width: 35%;
+		width: 40%;
 	}
 	.w3footeragile {
 		margin: 100px 10px 20px;
@@ -408,7 +377,7 @@ input[type="checkbox"] {
 
 @media screen and (max-width: 1280px) {
 	.w3layoutscontaineragileits {
-		width: 37%;
+		width: 45%;
 	}
 }
 

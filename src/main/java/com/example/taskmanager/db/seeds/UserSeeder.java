@@ -27,7 +27,7 @@ public class UserSeeder {
 
             User user = new User();
             user.setName("user1");
-            user.setPasswordHash(passwordHash);
+            user.setPassword(passwordHash);
             user.setEmail("user@gmail.com");
 
             userRepository.save(user);

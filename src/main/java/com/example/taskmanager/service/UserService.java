@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.taskmanager.model.User;
 import com.example.taskmanager.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,14 +27,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository; 
 
-    public Page<User> findAllWithFilter(String keyword, int page, int size) {
-    	Sort sort = Sort.by("id").descending();
-    	Pageable pageable = PageRequest.of(page - 1, size, sort);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        if (keyword != null && !keyword.isEmpty()) {
-            return userRepository.findByNameContainingIgnoreCase(keyword, pageable);
-        } else {
-            return userRepository.findAll(pageable);
-        }
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public void save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 }

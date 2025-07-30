@@ -10,4 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 	Page<User> findByNameContainingIgnoreCase(String keyword, Pageable pageable);
+    boolean existsByEmail(String email);
 }
