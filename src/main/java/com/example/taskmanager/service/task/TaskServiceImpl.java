@@ -18,22 +18,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.example.taskmanager.requests.TaskFormRequest;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.persistence.EntityNotFoundException;
+import com.example.taskmanager.utils.FileUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskService {
 
     private final String UPLOAD_DIR = "uploads/";
+    private final Integer IS_DELETE_FILE = 1;
 
     private final TaskRepository taskRepository;
     private final LabelRepository labelRepository;
@@ -74,6 +71,15 @@ public class TaskServiceImpl implements TaskService {
 
     public Boolean delete(Long id) {
         try {
+            Task task = this.detail(id);
+            if(task.getTitle() == null) {
+                return false;
+            }
+
+            if (task.getPhoto() != null) {
+                FileUtils.deleteFileIfExistsNio(task.getPhoto());
+            }
+
             taskRepository.deleteById(id);
             return true;
         } catch (Exception e) {
@@ -101,7 +107,7 @@ public class TaskServiceImpl implements TaskService {
 
             MultipartFile photo = taskFormRequest.getPhoto();
             if(!photo.isEmpty()) {
-                task.setPhoto(this.uploadFile(photo));
+                task.setPhoto(FileUtils.uploadFile(photo, UPLOAD_DIR));
             }            
 
             task.setStatus(taskFormRequest.getStatus());
@@ -117,21 +123,48 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
+    public Boolean update(Long id, TaskFormRequest taskFormRequest) {
 
-    protected String uploadFile(MultipartFile file) throws IOException {
+        Task task = this.detail(id);
+        if(task.getTitle() == null) {
+            return false;
+        }
+
         try {
-            Path uploadPath = Paths.get(UPLOAD_DIR);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+            if(
+                task.getPhoto() != null 
+                && taskFormRequest.getDeleteFile() == IS_DELETE_FILE
+            ) {
+                FileUtils.deleteFileIfExistsNio(task.getPhoto());
             }
 
-            String fileName = file.getOriginalFilename();
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            return filePath.toString();
+            Category categories = categoryRepository.findById(taskFormRequest.getCategoryId()).get();
 
-        } catch (IOException e) {
-            throw new IOException("Failed to upload file: " + e.getMessage());
+            List<Long> labelIds = Arrays.asList(taskFormRequest.getLabelId());
+            Set<Label> labels = new HashSet<>(labelRepository.findAllById(labelIds));
+
+            task.setTitle(taskFormRequest.getTitle());
+            task.setDescription(taskFormRequest.getDescription());
+            task.setDueDate(taskFormRequest.getDueDate());
+
+            MultipartFile photo = taskFormRequest.getPhoto();
+            if(!photo.isEmpty()) {
+                task.setPhoto(FileUtils.uploadFile(photo, UPLOAD_DIR));
+            } 
+            
+            if(photo.isEmpty() && taskFormRequest.getDeleteFile() == IS_DELETE_FILE) {
+                task.setPhoto(null);
+            }
+
+            task.setStatus(taskFormRequest.getStatus());
+            task.setPriority(taskFormRequest.getPriority());
+            task.setCategory(categories);
+            task.setLabels(labels);
+
+            taskRepository.save(task);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 

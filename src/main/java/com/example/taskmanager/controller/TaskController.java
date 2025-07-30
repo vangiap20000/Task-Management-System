@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,11 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 import java.util.List;
+import java.util.Optional;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import com.example.taskmanager.requests.TaskFormRequest;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/admin/tasks")
@@ -67,14 +70,24 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Boolean result = false;
+        String message = "Task deleted fail!";
+
         try {
-            taskService.delete(id);
-            redirectAttributes.addFlashAttribute("message", "Task deleted successfully!");
-            redirectAttributes.addFlashAttribute("messageType", "success");
+            result = taskService.delete(id);
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "Error deleting task: " + e.getMessage());
+            result = false;
+            message = "Error deleting task: " + e.getMessage();
+        }
+
+        if(result) {
+            message = "Task deleted successfully!";
+            redirectAttributes.addFlashAttribute("messageType", "success");
+        } else {
             redirectAttributes.addFlashAttribute("messageType", "danger");
         }
+
+        redirectAttributes.addFlashAttribute("message", message);
 
         return "redirect:/admin/tasks"; 
     }
@@ -142,13 +155,18 @@ public class TaskController {
     @GetMapping("/{id}")
     public String edit(
         @PathVariable Long id,
-        Model model
+        Model model,
+        TaskFormRequest taskFormRequest,
+        Optional<Boolean> isHaveErrors
     ) {
         Task task = taskService.detail(id);
         List<Label> labels = labelService.getAll();
         List<Category> categories = categoryService.getAll();
-        TaskFormRequest taskFormRequest =  new TaskFormRequest(task);
-  
+
+        if (!isHaveErrors.isPresent()) {
+            taskFormRequest =  new TaskFormRequest(task);
+        }
+
         model.addAttribute("taskFormRequest", taskFormRequest);
 
         model.addAttribute("task", task);
@@ -169,5 +187,43 @@ public class TaskController {
         ));
 
 	    return "layout/main";
+    }
+
+    @PutMapping("/{id}")
+    public String update(
+        @PathVariable Long id,
+        @Valid TaskFormRequest taskFormRequest,
+        BindingResult bindingResult,
+        RedirectAttributes redirectAttributes,
+        Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("taskFormRequest", taskFormRequest);
+            Optional<Boolean> isHaveErrors = Optional.of(true);
+            return this.edit(id, model, taskFormRequest, isHaveErrors);
+        }
+
+        String message = "Task update fail!";
+        Boolean result = false;
+
+        try {
+            result = taskService.update(id, taskFormRequest);
+            if (result) {
+                message = "Task created successfully!";
+            }
+
+        } catch (Exception e) {
+            message = "Error creating task: " + e.getMessage();
+        }
+
+        if (result) {
+            redirectAttributes.addFlashAttribute("messageType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("messageType", "danger");
+        }
+
+        redirectAttributes.addFlashAttribute("message", message);
+
+        return "redirect:/admin/tasks/" + id;
     }
 }

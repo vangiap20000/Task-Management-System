@@ -284,3 +284,8 @@ header #avatar {
     margin-bottom: 10px;
   }
 }
+
+.alert-dismissible.custom .btn-close {
+    top: 50%;
+    transform: translateY(-50%);
+}

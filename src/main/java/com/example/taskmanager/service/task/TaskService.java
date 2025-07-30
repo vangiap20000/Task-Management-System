@@ -15,4 +15,6 @@ public interface TaskService {
     public Boolean store(TaskFormRequest taskFormRequest);
 
     public Task detail(Long id);
+
+    public Boolean update(Long id, TaskFormRequest taskFormRequest);
 }

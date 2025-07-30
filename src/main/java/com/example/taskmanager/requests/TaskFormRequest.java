@@ -1,6 +1,7 @@
 package com.example.taskmanager.requests;
 
 import jakarta.validation.constraints.*;
+import com.example.taskmanager.utils.FileUtils;
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile; 
@@ -8,6 +9,7 @@ import com.example.taskmanager.validators.ValidFile;
 import com.example.taskmanager.validators.ValidCategoryId;
 import com.example.taskmanager.validators.ValidLabelIds;
 import com.example.taskmanager.validators.ValidMinCurrentDate;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.model.Label;
 import java.util.stream.Collectors;
@@ -47,6 +49,8 @@ public class TaskFormRequest {
     @ValidLabelIds
     private Long[] labelId;
 
+    private Integer deleteFile;
+
     public TaskFormRequest() {
 
     }
@@ -55,7 +59,10 @@ public class TaskFormRequest {
         this.title = task.getTitle();
         this.description = task.getDescription();
         this.dueDate = task.getDueDate();
-        this.photoUrl = task.getPhoto();
+        if(task.getPhoto() != null) {
+            this.photoUrl = FileUtils.buildPhotoUrl(task.getPhoto());
+        }
+        
         this.status = task.getStatus();
         this.priority = task.getPriority();
 
@@ -144,5 +151,13 @@ public class TaskFormRequest {
 
     public void setLabelId(Long[] labelId) {
         this.labelId = labelId;
+    }
+
+    public Integer getDeleteFile() {
+        return deleteFile;
+    }
+
+    public void setDeleteFile(Integer deleteFile) {
+        this.deleteFile = deleteFile;
     }
 }

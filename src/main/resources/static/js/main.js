@@ -12,11 +12,17 @@ function previewImage(event) {
     const reader = new FileReader();
 
     reader.onload = function (e) {
+        const isDeleteFile = 1;
         const preview = document.getElementById('preview');
         const removeImageBtn = document.getElementById('removeImageBtn');
+        const deleteFile = document.getElementById('deleteFile');
+
         preview.src = e.target.result;
         preview.classList.remove('hidden');
         removeImageBtn.classList.remove('hidden');
+        if (deleteFile) {
+            deleteFile.value = isDeleteFile;
+        }
     };
 
     if (file) {
