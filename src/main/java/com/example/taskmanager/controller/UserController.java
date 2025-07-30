@@ -32,27 +32,5 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping
-    public String listUsers(
-            @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            Model model) {
-
-        Page<User> userPage = userService.findAllWithFilter(keyword, page, size);
-
-        model.addAttribute("users", userPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", userPage.getTotalPages());
-        model.addAttribute("totalItems", userPage.getTotalElements());
-        model.addAttribute("size", size);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("contentPage", "users/list");
-	    model.addAttribute("pageTitle", "Danh sách thành viên");
-	    model.addAttribute("currentPath", "/admin/users");
-	    return "layout/main";
-
-    }
-	
 }
 

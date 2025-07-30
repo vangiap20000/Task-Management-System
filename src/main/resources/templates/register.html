@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/popuo-box.css}">
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+</head>
+<body>
+    <div class="w3layoutscontaineragileits">
+        <h1 class="title-register">REGISTER FORM</h1>
+        <div class="card">
+            <div class="card-header d-flex align-items-center">
+                <h3><i class="fas fa-user-plus me-2"></i>Register</h3>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/admin/register}" th:object="${user}" method="post" id="frm-register">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Name <span class="required-field text-red-600">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="name" placeholder="Enter name" th:field="*{name}" />
+                        </div>
+                        <div class="text-red-500 error-validate" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email <span class="required-field text-red-600">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control" id="email" placeholder="example@domain.com" th:field="*{email}" />
+                        </div>
+                        <div class="text-red-500 error-validate" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            <input type="text" class="form-control" id="phone" placeholder="Enter phone" th:field="*{phone}" />
+                        </div>
+                        <div class="text-red-500 error-validate" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password <span class="required-field text-red-600">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Enter password"/>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="text-red-500 error-validate" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                    </div>
+        
+                    <div class="form-group d-flex justify-content-center mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<script>
+    document.getElementById('togglePassword')?.addEventListener('click', function () {
+        const passwordField = document.getElementById('password');
+        const icon = this.querySelector('i');
+        const isVisible = passwordField.type === 'text';
+        passwordField.type = isVisible ? 'password' : 'text';
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+    });
+</script>
+</body>
+</html>
