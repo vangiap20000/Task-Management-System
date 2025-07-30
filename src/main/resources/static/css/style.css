@@ -112,3 +112,9 @@ input[type="file"] {
 .form-group {
   margin-bottom: 20px;
 }
+
+
+.alert-dismissible.custom .btn-close {
+  top: 50%;
+  transform: translateY(-50%);
+}

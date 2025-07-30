@@ -1,9 +1,8 @@
 <div th:fragment="content">
-    <div th:if="${message}" th:class="'alert alert-' + ${messageType}" role="alert">
-        <p th:text="${message}"></p>
-    </div>
+    <th:block th:replace="layout/fragments/alert :: alertSimpl(${message}, ${messageType})">
+    </th:block>
     <div class="mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <a href="#"
+        <a href="tasks/create"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex align-items-center">
             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 16 16">
                 <path
