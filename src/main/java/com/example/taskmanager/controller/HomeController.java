@@ -21,7 +21,7 @@ public class HomeController {
 			"jp", "Japan",
 			"us", "USA"
 		));
-        model.addAttribute("contentPage", "/common");
+        model.addAttribute("contentPage", "common");
 	    model.addAttribute("pageTitle", "Common");
 	    model.addAttribute("currentPath", "/admin/common");
 	    return "layout/main";
