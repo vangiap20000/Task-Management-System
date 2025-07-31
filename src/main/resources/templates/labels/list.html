@@ -1,48 +1,48 @@
 <div th:fragment="content">
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Danh sách nhãn</h1>
+            <h1 class="h3 mb-0 text-gray-800">Label List</h1>
             <a href="/admin/labels/create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                <i class="fas fa-plus fa-sm text-white-50"></i> Tạo nhãn mới
+                <i class="fas fa-plus fa-sm text-white-50"></i> Create New Label
             </a>
         </div>
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Tìm kiếm</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Search</h6>
             </div>
             <div class="card-body">
                 <form th:action="@{/admin/labels}" method="get" class="form-inline">
                     <div class="form-group mr-3">
-                        <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm theo tên...">
+                        <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="Search by name...">
                     </div>
                     <button type="submit" class="btn btn-primary mr-2">
-                        <i class="fas fa-search"></i> Tìm kiếm
+                        <i class="fas fa-search"></i> Search
                     </button>
                     <a th:href="@{/admin/labels}" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Xóa bộ lọc
+                        <i class="fas fa-times"></i> Clear Filter
                     </a>
                 </form>
             </div>
         </div>
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Danh sách nhãn</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Label List</h6>
             </div>
             <div class="card-body">
                 <div th:if="${#lists.isEmpty(labels)}" class="text-center py-4">
                     <i class="fas fa-tags fa-3x text-muted mb-3"></i>
-                    <p class="text-muted">Chưa có nhãn nào. <a th:href="@{/admin/labels/create}">Tạo nhãn đầu tiên</a></p>
+                    <p class="text-muted">No labels found. <a th:href="@{/admin/labels/create}">Create the first label</a></p>
                 </div>
                 <div th:if="${!#lists.isEmpty(labels)}" class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tên nhãn</th>
-                                <th>Số lượng task</th>
-                                <th>Ngày tạo</th>
-                                <th>Ngày cập nhật</th>
-                                <th>Thao tác</th>
+                                <th>Label Name</th>
+                                <th>Task Count</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,11 +54,11 @@
                                 <td th:text="${#temporals.format(label.updatedAt, 'dd/MM/yyyy HH:mm')}"></td>
                                 <td>
                                     <a th:href="@{/admin/labels/edit/{id}(id=${label.id})}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-edit"></i> Sửa
+                                        <i class="fas fa-edit"></i> Edit
                                     </a>
-                                    <form th:action="@{/admin/labels/delete/{id}(id=${label.id})}" method="post" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhãn này?')">
+                                    <form th:action="@{/admin/labels/delete/{id}(id=${label.id})}" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this label?')">
                                         <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> Xóa
+                                            <i class="fas fa-trash"></i> Delete
                                         </button>
                                     </form>
                                 </td>
@@ -70,19 +70,19 @@
                     <nav>
                         <ul class="pagination">
                             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                                <a class="page-link" th:href="@{/admin/labels(page=${currentPage - 1}, size=${size}, keyword=${keyword})}">Trước</a>
+                                <a class="page-link" th:href="@{/admin/labels(page=${currentPage - 1}, size=${size}, keyword=${keyword})}">Previous</a>
                             </li>
                             <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:classappend="${pageNum == currentPage} ? 'active'">
                                 <a class="page-link" th:href="@{/admin/labels(page=${pageNum}, size=${size}, keyword=${keyword})}" th:text="${pageNum}"></a>
                             </li>
                             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                                <a class="page-link" th:href="@{/admin/labels(page=${currentPage + 1}, size=${size}, keyword=${keyword})}">Sau</a>
+                                <a class="page-link" th:href="@{/admin/labels(page=${currentPage + 1}, size=${size}, keyword=${keyword})}">Next</a>
                             </li>
                         </ul>
                     </nav>
                 </div>
                 <div th:if="${totalItems > 0}" class="text-center text-muted">
-                    Hiển thị <span th:text="${#lists.size(labels)}"></span> trong tổng số <span th:text="${totalItems}"></span> nhãn
+                    Showing <span th:text="${#lists.size(labels)}"></span> out of <span th:text="${totalItems}"></span> labels
                 </div>
             </div>
         </div>

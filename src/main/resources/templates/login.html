@@ -8,10 +8,11 @@
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/css/popuo-box.css}">
     <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="icon" th:href="@{/images/logo_training.jpg}" type="image/x-icon">
 </head>
 <body>
 
-    <h1>LOGIN FORM</h1>
+    <h1>TASK MANAGEMENT</h1>
     <div th:if="${successMessage}" class="alert alert-success" role="alert">
         <span th:text="${successMessage}"></span>
     </div>
@@ -30,7 +31,7 @@
                 <li>
                     <input type="checkbox" id="brand1" value="">
                     <label for="brand1"><span></span>Remember me</label>
-                    <a href="#">Forgot password?</a>
+                    <!-- <a href="#">Forgot password?</a> -->
                 </li>
             </ul>
 
