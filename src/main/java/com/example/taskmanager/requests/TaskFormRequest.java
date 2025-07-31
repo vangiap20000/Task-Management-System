@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.model.Label;
 import java.util.stream.Collectors;
+import java.util.List;
 
 public class TaskFormRequest {
 
@@ -44,10 +45,10 @@ public class TaskFormRequest {
 
     @ValidCategoryId
     @NotNull(message = "Category is required")
-    private Long categoryId;
+    private Integer categoryId;
 
     @ValidLabelIds
-    private Long[] labelId;
+    private List<Integer> labelId;
 
     private Integer deleteFile;
 
@@ -67,14 +68,13 @@ public class TaskFormRequest {
         this.priority = task.getPriority();
 
         if(task.getCategory() != null) {
-            this.categoryId = (long) task.getCategory().getId(); 
+            this.categoryId = task.getCategory().getId(); 
         }
 
         if(task.getLabels() != null) {
-            Long[] labelIds = task.getLabels().stream()
+            List<Integer> labelIds = task.getLabels().stream()
                 .map(Label::getId)
-                .map(id -> Long.valueOf(id))
-                .toArray(Long[]::new);
+                .collect(Collectors.toList());
             this.labelId = labelIds;
         }
     }
@@ -137,19 +137,19 @@ public class TaskFormRequest {
         this.priority = priority;
     }
 
-    public Long getCategoryId() {
+    public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Long categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
 
-    public Long[] getLabelId() {
+    public List<Integer> getLabelId() {
         return labelId;
     }
 
-    public void setLabelId(Long[] labelId) {
+    public void setLabelId(List<Integer> labelId) {
         this.labelId = labelId;
     }
 

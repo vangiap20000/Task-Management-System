@@ -7,17 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CategoryIdValidator implements ConstraintValidator<ValidCategoryId, Long> {
+public class CategoryIdValidator implements ConstraintValidator<ValidCategoryId, Integer> {
 
     @Autowired
     private CategoryRepository categoryRepository;
 
     @Override
-    public boolean isValid(Long value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
-
+    public boolean isValid(Integer value, ConstraintValidatorContext context) {
         return categoryRepository.existsById(value);
     }
 }

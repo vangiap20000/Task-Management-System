@@ -76,7 +76,7 @@ public class CategoryController {
         model.addAttribute("size", size);
         model.addAttribute("keyword", keyword);
         model.addAttribute("contentPage", "categories/list");
-        model.addAttribute("pageTitle", "Danh sách danh mục");
+        model.addAttribute("pageTitle", "Category list");
         model.addAttribute("currentPath", "/admin/categories");
         return "layout/main";
     }
@@ -90,7 +90,7 @@ public class CategoryController {
         
         model.addAttribute("category", new Category());
         model.addAttribute("contentPage", "categories/form");
-        model.addAttribute("pageTitle", "Tạo danh mục mới");
+        model.addAttribute("pageTitle", "Create new category");
         model.addAttribute("currentPath", "/admin/categories");
         return "layout/main";
     }
@@ -108,15 +108,15 @@ public class CategoryController {
 
         if (result.hasErrors()) {
             model.addAttribute("contentPage", "categories/form");
-            model.addAttribute("pageTitle", "Tạo danh mục mới");
+            model.addAttribute("pageTitle", "Create new category");
             model.addAttribute("currentPath", "/admin/categories");
             return "layout/main";
         }
 
         if (categoryService.existsByNameAndUser(category.getName(), currentUser)) {
-            result.rejectValue("name", "error.category", "Tên danh mục đã tồn tại");
+            result.rejectValue("name", "error.category", "Category name already exists");
             model.addAttribute("contentPage", "categories/form");
-            model.addAttribute("pageTitle", "Tạo danh mục mới");
+            model.addAttribute("pageTitle", "Create new category");
             model.addAttribute("currentPath", "/admin/categories");
             return "layout/main";
         }
@@ -124,7 +124,7 @@ public class CategoryController {
         category.setUser(currentUser);
         categoryService.save(category);
         
-        redirectAttributes.addFlashAttribute("success", "Tạo danh mục thành công!");
+        redirectAttributes.addFlashAttribute("success", "Category created successfully!");
         return "redirect:/admin/categories";
     }
 
@@ -142,7 +142,7 @@ public class CategoryController {
 
         model.addAttribute("category", categoryOpt.get());
         model.addAttribute("contentPage", "categories/form");
-        model.addAttribute("pageTitle", "Chỉnh sửa danh mục");
+        model.addAttribute("pageTitle", "Edit category");
         model.addAttribute("currentPath", "/admin/categories");
         return "layout/main";
     }
@@ -161,7 +161,7 @@ public class CategoryController {
 
         if (result.hasErrors()) {
             model.addAttribute("contentPage", "categories/form");
-            model.addAttribute("pageTitle", "Chỉnh sửa danh mục");
+            model.addAttribute("pageTitle", "Edit category");
             model.addAttribute("currentPath", "/admin/categories");
             return "layout/main";
         }
@@ -174,9 +174,9 @@ public class CategoryController {
         Category existingCategory = existingCategoryOpt.get();
         
         if (categoryService.existsByNameAndUserAndIdNot(category.getName(), currentUser, id)) {
-            result.rejectValue("name", "error.category", "Tên danh mục đã tồn tại");
+            result.rejectValue("name", "error.category", "Category name already exists");
             model.addAttribute("contentPage", "categories/form");
-            model.addAttribute("pageTitle", "Chỉnh sửa danh mục");
+            model.addAttribute("pageTitle", "Edit category");
             model.addAttribute("currentPath", "/admin/categories");
             return "layout/main";
         }
@@ -184,7 +184,7 @@ public class CategoryController {
         existingCategory.setName(category.getName());
         categoryService.save(existingCategory);
         
-        redirectAttributes.addFlashAttribute("success", "Cập nhật danh mục thành công!");
+        redirectAttributes.addFlashAttribute("success", "Category updated successfully!");
         return "redirect:/admin/categories";
     }
 
@@ -198,9 +198,9 @@ public class CategoryController {
         Optional<Category> categoryOpt = categoryService.findByIdAndUser(id, currentUser);
         if (categoryOpt.isPresent()) {
             categoryService.deleteById(id);
-            redirectAttributes.addFlashAttribute("success", "Xóa danh mục thành công!");
+            redirectAttributes.addFlashAttribute("success", "Category deleted successfully!");
         } else {
-            redirectAttributes.addFlashAttribute("error", "Không tìm thấy danh mục!");
+            redirectAttributes.addFlashAttribute("error", "Category not found!");
         }
         
         return "redirect:/admin/categories";

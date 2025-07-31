@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -61,10 +62,7 @@ public class TaskServiceImpl implements TaskService {
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortValue), sortBy);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails currentUserDetails = (CustomUserDetails) auth.getPrincipal();
-        User currentUser = currentUserDetails.getUser();
+        User currentUser = this.currentUser();
 
         return taskRepository.findByUserAndTitleLike(currentUser, searchValue, pageable);
     }
@@ -89,16 +87,14 @@ public class TaskServiceImpl implements TaskService {
 
     public Boolean store(TaskFormRequest taskFormRequest) {
         try {
-            Category categories = categoryRepository.findById(taskFormRequest.getCategoryId()).get();
+            Category category = this.getCategory(taskFormRequest.getCategoryId());
 
-            List<Long> labelIds = Arrays.asList(taskFormRequest.getLabelId());
+            List<Integer> labelIds = taskFormRequest.getLabelId();
             Set<Label> labels = new HashSet<>(labelRepository.findAllById(labelIds));
 
             Task task = new Task();
 
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            CustomUserDetails currentUserDetails = (CustomUserDetails) auth.getPrincipal();
-            User currentUser = currentUserDetails.getUser();
+            User currentUser = this.currentUser();
             task.setUser(currentUser);
 
             task.setTitle(taskFormRequest.getTitle());
@@ -112,7 +108,7 @@ public class TaskServiceImpl implements TaskService {
 
             task.setStatus(taskFormRequest.getStatus());
             task.setPriority(taskFormRequest.getPriority());
-            task.setCategory(categories);
+            task.setCategory(category);
             task.setLabels(labels);
 
             taskRepository.save(task);
@@ -138,9 +134,9 @@ public class TaskServiceImpl implements TaskService {
                 FileUtils.deleteFileIfExistsNio(task.getPhoto());
             }
 
-            Category categories = categoryRepository.findById(taskFormRequest.getCategoryId()).get();
+            Category category = this.getCategory(taskFormRequest.getCategoryId());
 
-            List<Long> labelIds = Arrays.asList(taskFormRequest.getLabelId());
+            List<Integer> labelIds = taskFormRequest.getLabelId();
             Set<Label> labels = new HashSet<>(labelRepository.findAllById(labelIds));
 
             task.setTitle(taskFormRequest.getTitle());
@@ -158,7 +154,7 @@ public class TaskServiceImpl implements TaskService {
 
             task.setStatus(taskFormRequest.getStatus());
             task.setPriority(taskFormRequest.getPriority());
-            task.setCategory(categories);
+            task.setCategory(category);
             task.setLabels(labels);
 
             taskRepository.save(task);
@@ -169,12 +165,23 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public Task detail(Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails currentUserDetails = (CustomUserDetails) auth.getPrincipal();
-        User currentUser = currentUserDetails.getUser();
+        User currentUser = this.currentUser();
 
         Optional<Task> task =  taskRepository.findFirstByUserAndId(currentUser, id);
 
         return task.orElseThrow(() -> new EntityNotFoundException("Task with ID " + id + " not found"));
     };
+
+    protected User currentUser() {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails currentUserDetails = (CustomUserDetails) auth.getPrincipal();
+        User currentUser = currentUserDetails.getUser();
+
+        return currentUser;
+    }
+
+    protected Category getCategory(Integer categoryId) {
+        return categoryRepository.findById(categoryId).get();
+    }
 }

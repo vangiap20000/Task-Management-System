@@ -15,8 +15,8 @@ public class Label {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotBlank(message = "Tên nhãn không được để trống")
-    @Size(min = 2, max = 100, message = "Tên nhãn phải có từ 2 đến 100 ký tự")
+    @NotBlank(message = "The label name cannot be empty.")
+    @Size(min = 2, max = 100, message = "The label name must be between 2 and 100 characters.")
     @Column(nullable = false, length = 100)
     private String name;
 

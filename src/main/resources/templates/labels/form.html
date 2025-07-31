@@ -2,31 +2,31 @@
     <div class="container-fluid">
         <!-- Page Header -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800" th:text="${pageTitle}">Form nhãn</h1>
+            <h1 class="h3 mb-0 text-gray-800" th:text="${pageTitle}">Label Form</h1>
             <a th:href="@{/admin/labels}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
-                <i class="fas fa-arrow-left fa-sm text-white-50"></i> Quay lại
+                <i class="fas fa-arrow-left fa-sm text-white-50"></i> Go back
             </a>
         </div>
         <!-- Label Form -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary" th:text="${pageTitle}">Form nhãn</h6>
+                <h6 class="m-0 font-weight-bold text-primary" th:text="${pageTitle}">Label Form</h6>
             </div>
             <div class="card-body">
                 <form th:action="@{/admin/labels/create}" th:object="${label}" method="post">
                     <div class="form-group">
-                        <label for="name">Tên nhãn <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name" th:field="*{name}" th:value="${label.name}" placeholder="Nhập tên nhãn...">
+                        <label for="name">Label Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name" name="name" th:field="*{name}" th:value="${label.name}" placeholder="Enter label name...">
                         <div th:if="${#fields.hasErrors('name')}" class="text-danger">
                             <small th:errors="*{name}"></small>
                         </div>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Lưu
+                            <i class="fas fa-save"></i> Save
                         </button>
                         <a th:href="@{/admin/labels}" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Hủy
+                            <i class="fas fa-times"></i> Cancel
                         </a>
                     </div>
                 </form>
