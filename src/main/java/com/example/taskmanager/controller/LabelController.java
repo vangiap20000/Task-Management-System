@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -20,10 +21,31 @@ public class LabelController {
     private LabelService labelService;
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("labels", labelService.findAll());
+    public String list(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            Model model) {
+
+        List<Label> allLabels;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            allLabels = labelService.findByNameContainingIgnoreCase(keyword.trim());
+        } else {
+            allLabels = labelService.findAll();
+        }
+        int start = (page - 1) * size;
+        int end = Math.min(start + size, allLabels.size());
+        List<Label> pageContent = (start > allLabels.size()) ? List.of() : allLabels.subList(start, end);
+        int totalPages = (int) Math.ceil((double) allLabels.size() / size);
+        model.addAttribute("labels", pageContent);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", allLabels.size());
+        model.addAttribute("size", size);
+        model.addAttribute("keyword", keyword);
         model.addAttribute("pageTitle", "Danh sách nhãn");
         model.addAttribute("currentPath", "/admin/labels");
+        model.addAttribute("contentPage", "labels/list");
         return "layout/main";
     }
 
@@ -31,19 +53,25 @@ public class LabelController {
     public String createForm(Model model) {
         model.addAttribute("label", new Label());
         model.addAttribute("pageTitle", "Tạo nhãn mới");
-        return "labels/form";
+        model.addAttribute("currentPath", "/admin/labels");
+        model.addAttribute("contentPage", "labels/form");
+        return "layout/main";
     }
 
     @PostMapping("/create")
     public String create(@Valid @ModelAttribute Label label, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("pageTitle", "Tạo nhãn mới");
-            return "labels/form";
+            model.addAttribute("currentPath", "/admin/labels");
+            model.addAttribute("contentPage", "labels/form");
+            return "layout/main";
         }
         if (labelService.existsByName(label.getName())) {
             result.rejectValue("name", "error.label", "Tên nhãn đã tồn tại");
             model.addAttribute("pageTitle", "Tạo nhãn mới");
-            return "labels/form";
+            model.addAttribute("currentPath", "/admin/labels");
+            model.addAttribute("contentPage", "labels/form");
+            return "layout/main";
         }
         labelService.save(label);
         redirectAttributes.addFlashAttribute("success", "Tạo nhãn thành công!");
@@ -59,19 +87,25 @@ public class LabelController {
         }
         model.addAttribute("label", labelOpt.get());
         model.addAttribute("pageTitle", "Chỉnh sửa nhãn");
-        return "labels/form";
+        model.addAttribute("currentPath", "/admin/labels");
+        model.addAttribute("contentPage", "labels/form");
+        return "layout/main";
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable int id, @Valid @ModelAttribute Label label, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("pageTitle", "Chỉnh sửa nhãn");
-            return "labels/form";
+            model.addAttribute("currentPath", "/admin/labels");
+            model.addAttribute("contentPage", "labels/form");
+            return "layout/main";
         }
         if (labelService.existsByName(label.getName()) && labelService.findById(id).map(l -> !l.getName().equalsIgnoreCase(label.getName())).orElse(false)) {
             result.rejectValue("name", "error.label", "Tên nhãn đã tồn tại");
             model.addAttribute("pageTitle", "Chỉnh sửa nhãn");
-            return "labels/form";
+            model.addAttribute("currentPath", "/admin/labels");
+            model.addAttribute("contentPage", "labels/form");
+            return "layout/main";
         }
         label.setId(id);
         labelService.save(label);

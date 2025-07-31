@@ -2,7 +2,7 @@ package com.example.taskmanager.service;
 
 import com.example.taskmanager.model.Category;
 import com.example.taskmanager.model.User;
-import com.example.taskmanager.repository.CategoryRepository;
+import com.example.taskmanager.repository.category.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +22,6 @@ public class CategoryService {
     }
 
     public Page<Category> findAllByUserWithPagination(User user, Pageable pageable) {
-        // Since we need to filter by user, we'll get all categories for the user
-        // and then manually paginate. This is not ideal for large datasets
         List<Category> allCategories = categoryRepository.findByUser(user);
         
         int start = (int) pageable.getOffset();
@@ -68,4 +66,8 @@ public class CategoryService {
     public boolean existsByNameAndUserAndIdNot(String name, User user, int id) {
         return categoryRepository.existsByUserAndNameIgnoreCaseAndIdNot(user, name, id);
     }
-} 
+
+    public List<Category> findByNameContainingIgnoreCase(String name) {
+        return categoryRepository.findByNameContainingIgnoreCase(name);
+    }
+}

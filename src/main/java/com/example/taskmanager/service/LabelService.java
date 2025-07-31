@@ -1,7 +1,7 @@
 package com.example.taskmanager.service;
 
 import com.example.taskmanager.model.Label;
-import com.example.taskmanager.repository.LabelRepository;
+import com.example.taskmanager.repository.label.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +32,9 @@ public class LabelService {
 
     public boolean existsByName(String name) {
         return labelRepository.existsByNameIgnoreCase(name);
+    }
+
+    public List<Label> findByNameContainingIgnoreCase(String name) {
+        return labelRepository.findByNameContainingIgnoreCase(name);
     }
 }

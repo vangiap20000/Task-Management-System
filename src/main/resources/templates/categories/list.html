@@ -50,8 +50,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="category : ${categories}">
-                                <td th:text="${category.id}"></td>
+                            <tr th:each="category, iterStat : ${categories}">
+                                <td th:text="${iterStat.index + 1}"></td>
                                 <td th:text="${category.name}"></td>
                                 <td th:text="${#lists.size(category.tasks)}"></td>
                                 <td th:text="${#temporals.format(category.createdAt, 'dd/MM/yyyy HH:mm')}"></td>

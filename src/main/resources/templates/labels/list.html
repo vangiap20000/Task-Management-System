@@ -46,8 +46,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="label : ${labels}">
-                                <td th:text="${label.id}"></td>
+                            <tr th:each="label, iterStat : ${labels}">
+                                <td th:text="${iterStat.index + 1}"></td>
                                 <td th:text="${label.name}"></td>
                                 <td th:text="${#lists.size(label.tasks)}"></td>
                                 <td th:text="${#temporals.format(label.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
