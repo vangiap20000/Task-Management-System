@@ -31,6 +31,20 @@ import com.example.taskmanager.service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
-}
 
+	@GetMapping
+	public String listUsers(Model model) {
+		model.addAttribute("contentPage", "users/list");
+        model.addAttribute("pageTitle", "User list");
+        model.addAttribute("currentPath", "/admin/users");
+		return "layout/main";
+	}
+
+	@GetMapping("/create")
+	public String createForm(Model model) {
+        model.addAttribute("contentPage", "users/form");
+        model.addAttribute("pageTitle", "Create new user");
+        model.addAttribute("currentPath", "/admin/users");
+        return "layout/main";
+	}
+}
