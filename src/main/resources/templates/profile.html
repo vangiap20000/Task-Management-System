@@ -1,0 +1,147 @@
+<div th:fragment="content">
+    <th:block th:replace="layout/fragments/alert :: alertSimpl(${message}, ${messageType})">
+    </th:block>
+    <form id="profileForm" method="POST" enctype="multipart/form-data" th:action="@{/admin/profile/update}" th:object="${profileFormRequest}">
+        <div class="profile-page">
+            <div class="row">
+                <!-- Cột trái: Ảnh đại diện -->
+                <div class="col-xl-4">
+                    <!-- Profile picture card-->
+                    <div class="card mb-4 mb-xl-0">
+                        <div class="card-header">Profile Picture</div>
+                        <div class="card-body text-center avatar-center">
+                            <img th:src="${user.avatar != null and user.avatar != ''} ? @{'/uploads/' + ${user.avatar}} : @{'https://picsum.photos/200'}" id="avatarPreview" alt="Avatar">
+                            <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;">
+                            <button class="btn btn-primary" type="button" onclick="document.getElementById('imageFile').click();">Upload avatar</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cột phải: Thông tin cá nhân -->
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body text-left">
+                            <div class="form-group mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        th:value="${user.email}" readonly disabled>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="name" class="form-label">Name <span class="required-field"></span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        th:field="*{name}">
+                                </div>
+                                <div th:if="${#fields.hasErrors('name')}" class="text-danger small" th:errors="*{name}"></div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-phone"></i>
+                                    </span>
+                                    <input type="tel" class="form-control" id="phone" name="phone"
+                                        th:field="*{phone}">
+                                </div>
+                                <div th:if="${#fields.hasErrors('phone')}" class="text-danger small" th:errors="*{phone}"></div>
+                            </div>
+                            <hr class="my-4">
+                            <h5 class="mb-3">
+                                <i class="fas fa-key me-2"></i>Change Password
+                            </h5>
+                            <div class="form-group mb-3">
+                                <label for="password" class="form-label">New password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="password" name="password" th:field="*{password}">
+                                    <button class="btn btn-outline-secondary toggle-password"
+                                            type="button" tabindex="-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div th:if="${#fields.hasErrors('password')}" class="text-danger small" th:errors="*{password}"></div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="confirmPassword"
+                                        name="confirmPassword" th:field="*{confirmPassword}">
+                                    <button class="btn btn-outline-secondary toggle-password"
+                                            type="button" tabindex="-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div th:if="${#fields.hasErrors('confirmPassword')}" class="text-danger small" th:errors="*{confirmPassword}"></div>
+                            </div>
+                            <div class="d-flex justify-content-end mt-4">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-1"></i>Update
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageFile = document.getElementById('imageFile');
+            let avatarPreview = document.getElementById('avatarPreview');
+            
+            // Nếu không tìm thấy avatarPreview, tìm img đầu tiên trong avatar-center
+            if (!avatarPreview) {
+                avatarPreview = document.querySelector('.avatar-center img');
+            }
+
+            if (imageFile && avatarPreview) {
+                imageFile.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            avatarPreview.src = e.target.result;
+                            avatarPreview.style.animation = "fadeIn 0.2s";
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            } else {
+                console.log('Không tìm thấy avatar preview element');
+            }
+        });
+
+        // Xử lý hiển thị/ẩn mật khẩu
+        const toggleButtons = document.querySelectorAll('.toggle-password');
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('i');
+
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        });
+
+    </script>
+</div>

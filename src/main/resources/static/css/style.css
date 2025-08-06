@@ -80,11 +80,11 @@ button:hover,
 }
 
 .btn-secondary {
-  background-color: #aaa;
+  background-color: #6c757d;
 }
 
 .btn-secondary:hover {
-  background-color: #888;
+  background-color: #5a6268;
 }
 
 /* Checkbox + Radio */
