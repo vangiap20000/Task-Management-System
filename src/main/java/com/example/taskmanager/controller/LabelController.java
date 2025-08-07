@@ -43,7 +43,7 @@ public class LabelController {
         model.addAttribute("totalItems", allLabels.size());
         model.addAttribute("size", size);
         model.addAttribute("keyword", keyword);
-        model.addAttribute("pageTitle", "Danh sách nhãn");
+        model.addAttribute("pageTitle", "Label list");
         model.addAttribute("currentPath", "/admin/labels");
         model.addAttribute("contentPage", "labels/list");
         return "layout/main";
@@ -52,7 +52,7 @@ public class LabelController {
     @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("label", new Label());
-        model.addAttribute("pageTitle", "Tạo nhãn mới");
+        model.addAttribute("pageTitle", "Create new label");
         model.addAttribute("currentPath", "/admin/labels");
         model.addAttribute("contentPage", "labels/form");
         return "layout/main";
@@ -61,20 +61,20 @@ public class LabelController {
     @PostMapping("/create")
     public String create(@Valid @ModelAttribute Label label, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("pageTitle", "Tạo nhãn mới");
+            model.addAttribute("pageTitle", "Create new label");
             model.addAttribute("currentPath", "/admin/labels");
             model.addAttribute("contentPage", "labels/form");
             return "layout/main";
         }
         if (labelService.existsByName(label.getName())) {
-            result.rejectValue("name", "error.label", "Tên nhãn đã tồn tại");
-            model.addAttribute("pageTitle", "Tạo nhãn mới");
+            result.rejectValue("name", "error.label", "Label name already exists");
+            model.addAttribute("pageTitle", "Create new label");
             model.addAttribute("currentPath", "/admin/labels");
             model.addAttribute("contentPage", "labels/form");
             return "layout/main";
         }
         labelService.save(label);
-        redirectAttributes.addFlashAttribute("success", "Tạo nhãn thành công!");
+        redirectAttributes.addFlashAttribute("success", "Label created successfully!");
         return "redirect:/admin/labels";
     }
 
@@ -82,11 +82,11 @@ public class LabelController {
     public String editForm(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
         Optional<Label> labelOpt = labelService.findById(id);
         if (labelOpt.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Không tìm thấy nhãn!");
+            redirectAttributes.addFlashAttribute("error", "Label not found!");
             return "redirect:/admin/labels";
         }
         model.addAttribute("label", labelOpt.get());
-        model.addAttribute("pageTitle", "Chỉnh sửa nhãn");
+        model.addAttribute("pageTitle", "Edit label");
         model.addAttribute("currentPath", "/admin/labels");
         model.addAttribute("contentPage", "labels/form");
         return "layout/main";
@@ -95,28 +95,28 @@ public class LabelController {
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable int id, @Valid @ModelAttribute Label label, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("pageTitle", "Chỉnh sửa nhãn");
+            model.addAttribute("pageTitle", "Edit label");
             model.addAttribute("currentPath", "/admin/labels");
             model.addAttribute("contentPage", "labels/form");
             return "layout/main";
         }
         if (labelService.existsByName(label.getName()) && labelService.findById(id).map(l -> !l.getName().equalsIgnoreCase(label.getName())).orElse(false)) {
-            result.rejectValue("name", "error.label", "Tên nhãn đã tồn tại");
-            model.addAttribute("pageTitle", "Chỉnh sửa nhãn");
+            result.rejectValue("name", "error.label", "Label name already exists");
+            model.addAttribute("pageTitle", "Edit label");
             model.addAttribute("currentPath", "/admin/labels");
             model.addAttribute("contentPage", "labels/form");
             return "layout/main";
         }
         label.setId(id);
         labelService.save(label);
-        redirectAttributes.addFlashAttribute("success", "Cập nhật nhãn thành công!");
+        redirectAttributes.addFlashAttribute("success", "Label updated successfully!");
         return "redirect:/admin/labels";
     }
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable int id, RedirectAttributes redirectAttributes) {
         labelService.deleteById(id);
-        redirectAttributes.addFlashAttribute("success", "Xóa nhãn thành công!");
+        redirectAttributes.addFlashAttribute("success", "Label deleted successfully!");
         return "redirect:/admin/labels";
     }
 }

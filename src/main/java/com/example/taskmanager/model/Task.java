@@ -171,4 +171,9 @@ public class Task {
         this.labels.remove(label);
         label.getTasks().remove(this);
     }
+
+    public boolean checkDueDate() {
+        LocalDate today = LocalDate.now();
+        return today.isAfter(dueDate);
+    }
 }
